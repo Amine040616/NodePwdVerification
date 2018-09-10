@@ -29,9 +29,57 @@ function mailvalidation (req, res){
 };
 
 
-app.post('/method04', (req, res) => {
-    mailvalidation(req.body.identifiant);
+app.post('/method04mail', (req, res) => {
+    mailvalidation(req.body.identifiant, res);
 });
+
+
+// Validation MDP :
+
+//Function mdpvalidation :
+
+function mdpvalidation (req, res){
+    
+    var nimrou = ["@","_","-",".",",",";",":"];
+    var power = 0;
+    var powerMessages = ['Faible', 'Normale', 'Fort', 'Super', 'Mot de passe invalide.'];
+    
+    if(req.length < 8){
+        power = "4";
+    } else {
+    
+        for (var i = 0; i < req.length; i++) {
+            if(isNaN(req[i]) == false){
+                power++;
+                console.log('Number');
+                break;
+            }
+        }
+
+        for (var i = 0; i < req.length; i++) {
+            if(nimrou.indexOf(req[i]) == -1 && isNaN(req[i]) && req[i] == req[i].toUpperCase()){
+                power++;
+                console.log('Uppercase');
+                break;
+            }
+        }
+
+        for (var i = 0; i < req.length; i++) {
+            if(nimrou.indexOf(req[i]) > -1){
+                power++;
+                console.log('Special');
+                break;
+            }   
+        }                
+    }
+    
+    return res.send(powerMessages[power]);
+    };
+    
+    
+    app.post('/method04mdp', (req, res) => {
+        mdpvalidation(req.body.password, res);
+    });
 
 // Regex :
 // Method test(); :

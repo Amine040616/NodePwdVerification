@@ -15,6 +15,57 @@ app.get('/', (req, res) => {
     res.send('Hello World!')
 });
 
+
+
+//validation nickname :
+
+function nickname (req, res){
+    var validate = "Votre pseudonyme n'est pas valide";
+    for (var i = 0; i < req.length; i++) {
+        if (req[i] == " ") {
+            validate = "Votre pseudonyme n'est pas valide";
+            break;
+        } else {
+            validate = "Votre pseudonyme est valide";
+        }   
+    }
+    res.send(validate);
+};
+
+app.post('/pseudonyme', (req, res) => {
+    nickname(req.body.pseudonyme, res);
+});
+
+//validation birth Date :
+
+function age (a, b){
+    var oneyear = 60*60*24*365*1000;
+    return Math.floor(Math.abs(a-b)/oneyear);
+}
+
+function birthdatevalidation (req, res){
+    var validate = "Vous n'avez pas l'age pour accéder au site";
+    var birthdate = req.body.daybirth + " " + req.body.monthbirth + " " + req.body.yearbirth;
+    var ancien = Date.parse(birthdate);
+    var present = Date.now();
+    
+    console.log(age (present, ancien));
+    
+    if (age (present, ancien) < 18) {
+        validate = "Vous n'avez pas l'age pour accéder au site";
+    } else {
+        validate = "Bienvenue dans notre site web";
+    }   
+    
+    res.send(validate);
+};
+
+
+
+app.post('/birthdate', (req, res) => {
+    birthdatevalidation(req, res);
+});
+
 // Validation adresse mail :
 
 //Function mailvalidation :
@@ -22,9 +73,9 @@ app.get('/', (req, res) => {
 function mailvalidation (req, res){
     var rightexpression = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (rightexpression.test(req)){
-        return res.send("Votre Identifiant est valide");
+        res.send("Votre Identifiant est valide");
     } else {
-        return res.send("Votre Identifiant est invalide");
+        res.send("Votre Identifiant est invalide");
     }
 };
 
@@ -73,7 +124,7 @@ function mdpvalidation (req, res){
         }                
     }
     
-    return res.send(powerMessages[power]);
+    res.send(powerMessages[power]);
     };
     
     

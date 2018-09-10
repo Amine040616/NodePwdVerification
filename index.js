@@ -13,9 +13,56 @@ app.use(bodyParser.json())
 
 app.get('/', (req, res) => {
     res.send('Hello World!')
-})
+});
 
 // Validation adresse mail :
+
+//Function mailvalidation :
+
+function mailvalidation (req, res){
+    var rightexpression = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (rightexpression.test(req)){
+        return res.send("Votre Identifiant est valide");
+    } else {
+        return res.send("Votre Identifiant est invalide");
+    }
+};
+
+
+app.post('/method04', (req, res) => {
+    mailvalidation(req.body.identifiant);
+});
+
+// Regex :
+// Method test(); :
+
+app.post('/method02', (req, res) => {
+    var identify = req.body.identifiant;
+    var rightexpression = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (rightexpression.test(identify)){
+        res.send("Votre Identifiant est valide");
+    } else {
+        res.send("Votre Identifiant est invalide");
+    }
+});
+
+// Method match(); :
+
+app.post('/method03', (req, res) => {
+    var identify = req.body.identifiant;
+    var rightexpression = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    var found = identify.match(rightexpression);
+    console.log(found);
+    if (!found){
+        console.log("Votre Identifiant est invalide ya bacha");
+        res.send("Votre Identifiant est invalide");
+    } else {
+        console.log("Votre Identifiant est valide ya bacha");
+        res.send("Votre Identifiant est valide");
+    }
+});
+
+// NonRegex :
 
 app.post('/', (req, res) => {
      
@@ -25,7 +72,6 @@ app.post('/', (req, res) => {
     var valid = 0;
     var reponse = "";
 
-    //var forme = /[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}/igm;
 
     for (var i = 0; i < identify.length; i++) {
         
@@ -45,11 +91,9 @@ app.post('/', (req, res) => {
         }  
     }
 
-
-
     // Validation MDP :
 
-
+    // NonRegex :
 
     if (found == "Votre Identifiant est valider"){
 
@@ -94,9 +138,12 @@ app.post('/', (req, res) => {
     
     //res.send(found + "  et votre mot de passe du niveau : " + powerMessages[power]);
     res.send(reponse);
-})
-
-app.get('/app', (req, res) => res.send('Hello mouch World!'))
+});
 
 
-app.listen(5000, () => console.log('Example app listening on port 5000!'))
+
+
+app.get('/app', (req, res) => res.send('Hello mouch World!'));
+
+
+app.listen(5000, () => console.log('Example app listening on port 5000!'));
